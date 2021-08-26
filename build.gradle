@@ -2,7 +2,7 @@ plugins {
 	id 'java-library'
 }
 
-group = 'com.vmware.gateway.custom'
+group = 'com.vmware.scg.extensions'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
