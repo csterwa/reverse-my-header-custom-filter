@@ -1,0 +1,27 @@
+plugins {
+	id 'java-library'
+}
+
+group = 'com.vmware.gateway.custom'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2020.0.3")
+	set('springBootVersion', "2.5.4")
+}
+
+dependencies {
+	implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+	implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+	useJUnitPlatform()
+}
