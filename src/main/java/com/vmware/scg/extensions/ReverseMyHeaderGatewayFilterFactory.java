@@ -7,7 +7,6 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
 
 @Component
 public class ReverseMyHeaderGatewayFilterFactory
@@ -19,19 +18,18 @@ public class ReverseMyHeaderGatewayFilterFactory
   public GatewayFilter apply(Object config) {
      return (exchange, chain) ->
      {
-        ServerWebExchange updatedExchange = exchange.mutate()
-            .request(request -> request.headers(this::reverseHeader))
-            .build();
-        return chain.filter(updatedExchange);
+		 reverseHeader(exchange.getRequest().getHeaders(), exchange.getResponse().getHeaders());
+
+		 return chain.filter(exchange);
      };
   }
 
-  private void reverseHeader(HttpHeaders headers) {
-     headers.getOrEmpty("X-Reverse-Me")
+  private void reverseHeader(HttpHeaders requestHeaders, HttpHeaders responseHeaders) {
+	  requestHeaders.getOrEmpty("X-Reverse-Me")
            .stream()
            .map(value -> new StringBuilder(value).reverse().toString())
            .forEach(reversed -> {
-		       headers.add("X-Reversed", reversed);
+		       responseHeaders.add("X-Reversed", reversed);
 		       LOGGER.info("Added X-Reversed header with value " + reversed);
 		     });
   }
